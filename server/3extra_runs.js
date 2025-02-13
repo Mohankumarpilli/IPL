@@ -1,42 +1,44 @@
 const fs = require('fs');
 
-const data = JSON.parse(fs.readFileSync('../Data/deliver.json', 'utf-8'));
+const deliveriesData = JSON.parse(fs.readFileSync('../Data/deliver.json', 'utf-8'));
+const matchesData = JSON.parse(fs.readFileSync('../Data/matches.json', 'utf-8'));
 
-const data1 = JSON.parse(fs.readFileSync('../Data/matches.json','utf-8'));
-
-function extra_runs_per_team(){
-    function collect_season(data){
-        let res = data.filter((ele) => ele.season === '2016')
-                        .map(ele => ele.id);
-        return res
+function getMatchIdsForSeason(matches, seasonYear) {
+    let season_ids = [];
+    for(let index of matches){
+        if(index.season == seasonYear){
+            season_ids.push(index.id);
+        }
     }
-    
-    const season_ids = collect_season(data1);
-    
-    
-    function extra_runs_per_team(data,season) {
-        
-        return data.reduce((acc,ele) => {
-            if (season.includes(ele.match_id)) { 
-                const ball_team = ele.bowling_team;
-                if(!acc[ball_team]){
-                    acc[ball_team] = parseInt(ele.extra_runs);
-                }else{
-                    acc[ball_team] += parseInt(ele.extra_runs);
-                }
-            }
-            return acc;
-        },{});
-    }
-    
-    const arr = extra_runs_per_team(data,season_ids);
-    return arr;
+    return season_ids;
 }
 
+function computeExtraRuns(deliveries, matchIds) {
+    let extraRunsByTeam = {};
 
-module.exports = extra_runs_per_team;
+    for(let delivery of deliveries){
+        if (matchIds.includes(delivery.match_id)) { 
+            const bowlingTeam = delivery.bowling_team;
+            const extraRuns = parseInt(delivery.extra_runs);
 
-let result = extra_runs_per_team();
-console.log(result)
-fs.writeFileSync('../Public/3.json',JSON.stringify(result,null,2));
-  
+            if (!extraRunsByTeam[bowlingTeam]) {
+                extraRunsByTeam[bowlingTeam] = extraRuns;
+            } else {
+                extraRunsByTeam[bowlingTeam] += extraRuns;
+            }
+        }
+    }
+    return extraRunsByTeam;
+}
+
+function calculateExtraRunsPerTeam() {
+
+    const seasonMatchIds = getMatchIdsForSeason(matchesData, '2016');
+    return computeExtraRuns(deliveriesData, seasonMatchIds);
+}
+
+module.exports = calculateExtraRunsPerTeam;
+
+let extraRunsResult = calculateExtraRunsPerTeam();
+console.log(extraRunsResult);    
+fs.writeFileSync('../Public1/3.json', JSON.stringify(extraRunsResult, null, 2));
