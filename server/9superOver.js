@@ -35,3 +35,4 @@ function bestSuperOverEconomy() {
 let result = bestSuperOverEconomy();
 console.log(result);
 fs.writeFileSync('../Public/9.json', JSON.stringify(result, null, 2));
+//done all 9
