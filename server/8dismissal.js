@@ -5,14 +5,14 @@ function highestDismissalsByBowler() {
 
     let dismissals = {};
 
-    for (let delivery of deliveries) {
+    deliveries.forEach( (delivery) => {
         const { bowler, player_dismissed, dismissal_kind } = delivery;
 
         if (dismissal_kind && dismissal_kind !== 'run out' && player_dismissed) {
             let pair = `${bowler}-${player_dismissed}`;
             dismissals[pair] = (dismissals[pair] || 0) + 1;
         }
-    }
+    });
 
     let topDismissal = Object.entries(dismissals)
         .sort((a, b) => b[1] - a[1])
