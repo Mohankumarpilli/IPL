@@ -17,4 +17,4 @@ function countMatchesPerSeason() {
 }
 
 let matchResults = countMatchesPerSeason();
-fs.writeFileSync('../Public1/1.json', JSON.stringify(matchResults, null, 2));
+fs.writeFileSync('../Public/1.json', JSON.stringify(matchResults, null, 2));

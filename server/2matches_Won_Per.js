@@ -20,4 +20,4 @@ function countWinsPerSeason() {
 
 let matchWins = countWinsPerSeason();
 console.log(matchWins);
-fs.writeFileSync('../Public1/2.json', JSON.stringify(matchWins, null, 2));
+fs.writeFileSync('../Public/2.json', JSON.stringify(matchWins, null, 2));

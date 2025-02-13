@@ -41,4 +41,4 @@ module.exports = calculateExtraRunsPerTeam;
 
 let extraRunsResult = calculateExtraRunsPerTeam();
 console.log(extraRunsResult);    
-fs.writeFileSync('../Public1/3.json', JSON.stringify(extraRunsResult, null, 2));
+fs.writeFileSync('../Public/3.json', JSON.stringify(extraRunsResult, null, 2));
